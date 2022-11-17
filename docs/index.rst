@@ -17,6 +17,7 @@ It can convert a list of strings into numbers
    content/*
 
 .. autofunction:: io.open
+   
 
 Indices and tables
 ==================
