@@ -63,14 +63,3 @@ if __name__ == "__main__":
     
     print(result)
     
-s=["1","2 3  5.5","4"]
-ss=[1,2,3,4,5]
-print([1]*3)
-all_numbers = []
-for s in s:
-        # Take each string in the list, split it into substrings separated by
-        # whitespace, and collect them into a single list...
-    all_numbers.extend([token.strip() for token in s.split()])
-    # ...then convert each substring into a number
-print([float(number_string) for number_string in all_numbers])
-print(all_numbers)
