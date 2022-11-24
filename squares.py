@@ -54,21 +54,27 @@ def convert_numbers(list_of_strings):
 if __name__ == "__main__":
 
     parser = ArgumentParser(description='Input list of numbers to average over')
-    parser.add_argument('number_list', nargs="*", type=str)
-    parser.add_argument('--weights', nargs='*', type=str)
+    parser.add_argument('number_list', type=str)
+    parser.add_argument('--weights', type=str)
 
     #numbers = convert_numbers(numbers_strings)
     arguments = parser.parse_args()
-    #print(arguments)
-    
-    numbers = convert_numbers(arguments.number_list)
-    weights = arguments.weights
+    number_file = arguments.number_list
+    weight_file = arguments.weights
 
-    if (weights is None):
+    numbers = None
+    weights = None
+    with open(number_file, 'r') as file:
+        numbers = convert_numbers(file.readlines())
+
+    if (weight_file is None):
         weights = np.ones(len(numbers))
     else:
-        weights = convert_numbers(arguments.weights)
-
+        #weights = convert_numbers(arguments.weights)
+        with open(weight_file, 'r') as file:
+            weights = convert_numbers(file.readlines())
+    #print('input numbers ', numbers)
+    #print('input weights ', weights)
     assert (len(numbers)  == len(weights))
     result = average_of_squares(numbers, weights)
     
