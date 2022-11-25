@@ -63,12 +63,18 @@ def process():
     parser = ArgumentParser(description="Return weighted average of squares")
 
     parser.add_argument("number_strings", nargs="*", type=str)
+    parser.add_argument("--weight_strings", "-w", nargs="*", type=str)
 
     arguments = parser.parse_args()
 
     numbers = convert_numbers(arguments.number_strings)
+    
+    if arguments.weight_strings is None:
+        weights = None
+    else:
+        weights = convert_numbers(arguments.weight_strings)
 
-    print(average_of_squares(numbers))
+    print(average_of_squares(numbers, weights))
 
 
 if __name__ == "__main__":
