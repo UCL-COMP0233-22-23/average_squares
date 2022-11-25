@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import csv
 
 """Computation of weighted average of squares."""
 # python -m doctest squares.py
@@ -62,17 +63,22 @@ def convert_numbers(list_of_strings):
 def process():
     parser = ArgumentParser(description="Return weighted average of squares")
 
-    parser.add_argument("number_strings", nargs="*", type=str)
-    parser.add_argument("--weight_strings", "-w", nargs="*", type=str)
+    parser.add_argument("number_file", type=str)
+    parser.add_argument("--weight_file", "-w", type=str)
 
     arguments = parser.parse_args()
 
-    numbers = convert_numbers(arguments.number_strings)
+    nfile = arguments.number_file
+    wfile =  arguments.weight_file
+
+    with open(nfile, 'r') as nf:
+        numbers = convert_numbers(nf.readlines())
     
-    if arguments.weight_strings is None:
+    if arguments.weight_file is None:
         weights = None
     else:
-        weights = convert_numbers(arguments.weight_strings)
+        with open(wfile, 'r') as wf:
+            weights = convert_numbers(wf.readlines())
 
     print(average_of_squares(numbers, weights))
 
