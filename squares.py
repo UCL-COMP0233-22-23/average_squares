@@ -1,12 +1,16 @@
+from argparse import ArgumentParser
+import csv
+
 """Computation of weighted average of squares."""
+# python -m doctest squares.py
 
 
 def average_of_squares(list_of_numbers, list_of_weights=None):
-    """ Return the weighted average of a list of values.
-    
+    """Return the weighted average of a list of values.
+
     By default, all values are equally weighted, but this can be changed
     by the list_of_weights argument.
-    
+
     Example:
     --------
     >>> average_of_squares([1, 2, 4])
@@ -19,26 +23,26 @@ def average_of_squares(list_of_numbers, list_of_weights=None):
 
     """
     if list_of_weights is not None:
-        assert len(list_of_weights) == len(list_of_numbers), \
-            "weights and numbers must have same length"
+        assert len(list_of_weights) == len(
+            list_of_numbers
+        ), "weights and numbers must have same length"
         effective_weights = list_of_weights
     else:
         effective_weights = [1] * len(list_of_numbers)
     squares = [
         weight * number * number
-        for number, weight
-        in zip(list_of_numbers, effective_weights)
+        for number, weight in zip(list_of_numbers, effective_weights)
     ]
-    return sum(squares)
+    return sum(squares) / len(list_of_numbers)
 
 
 def convert_numbers(list_of_strings):
     """Convert a list of strings into numbers, ignoring whitespace.
-    
+
     Example:
     --------
     >>> convert_numbers(["4", " 8 ", "15 16", " 23    42 "])
-    [4, 8, 15, 16]
+    [4, 8, 15, 16, 23, 42]
 
     """
     all_numbers = []
@@ -47,16 +51,37 @@ def convert_numbers(list_of_strings):
         # whitespace, and collect them into a single list...
         all_numbers.extend([token.strip() for token in s.split()])
     # ...then convert each substring into a number
-    return [float(number_string) for number_string in all_numbers]
+    output = []
+    for number_string in all_numbers:
+        if int(number_string) == float(number_string):
+            output.append(int(number_string))
+        else:
+            output.append(float(number_string))
+    return output
+
+
+def process():
+    parser = ArgumentParser(description="Return weighted average of squares")
+
+    parser.add_argument("number_file", type=str)
+    parser.add_argument("--weight_file", "-w", type=str)
+
+    arguments = parser.parse_args()
+
+    nfile = arguments.number_file
+    wfile =  arguments.weight_file
+
+    with open(nfile, 'r') as nf:
+        numbers = convert_numbers(nf.readlines())
+    
+    if arguments.weight_file is None:
+        weights = None
+    else:
+        with open(wfile, 'r') as wf:
+            weights = convert_numbers(wf.readlines())
+
+    print(average_of_squares(numbers, weights))
 
 
 if __name__ == "__main__":
-    numbers_strings = ["1","2","4"]
-    weight_strings = ["1","1","1"]        
-    
-    numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weight_strings)
-    
-    result = average_of_squares(numbers, weights)
-    
-    print(result)
+    process()
