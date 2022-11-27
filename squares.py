@@ -58,7 +58,10 @@ def process():
 
     arguments = parser.parse_args()
 
-    result = average_of_squares(convert_numbers(arguments.numbers_strings))
+    if arguments.weight_strings:
+        result = average_of_squares(convert_numbers(arguments.numbers_strings), convert_numbers(arguments.weight_strings))
+    else:
+        result = average_of_squares(convert_numbers(arguments.numbers_strings))
     print(result)
 
 if __name__ == "__main__":
