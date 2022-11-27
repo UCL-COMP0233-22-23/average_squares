@@ -1,3 +1,5 @@
+from argparse import ArgumentParser
+
 """Computation of weighted average of squares."""
 
 
@@ -29,7 +31,7 @@ def average_of_squares(list_of_numbers, list_of_weights=None):
         for number, weight
         in zip(list_of_numbers, effective_weights)
     ]
-    return sum(squares)
+    return sum(squares)/len(squares)
 
 
 def convert_numbers(list_of_strings):
@@ -38,7 +40,7 @@ def convert_numbers(list_of_strings):
     Example:
     --------
     >>> convert_numbers(["4", " 8 ", "15 16", " 23    42 "])
-    [4, 8, 15, 16]
+    [4, 8, 15, 16, 23, 42]
 
     """
     all_numbers = []
@@ -47,15 +49,24 @@ def convert_numbers(list_of_strings):
         # whitespace, and collect them into a single list...
         all_numbers.extend([token.strip() for token in s.split()])
     # ...then convert each substring into a number
-    return [float(number_string) for number_string in all_numbers]
+    return [int(number_string) for number_string in all_numbers]
 
 
 if __name__ == "__main__":
-    numbers_strings = ["1","2","4"]
-    weight_strings = ["1","1","1"]        
+    parser = ArgumentParser(description="Generate correct averaged sums.")
+    parser.add_argument('--file_numbers')
+    parser.add_argument('--file_weights',default = 'default_weights.txt')    
+    arguments= parser.parse_args()    
     
-    numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weight_strings)
+    with open(arguments.file_numbers,'r') as input_numbers:
+        numbers = convert_numbers(input_numbers.readlines())
+
+    with open(arguments.file_weights,'r') as input_weights:
+        if input_weights!=None:
+            weights = convert_numbers(input_weights.readlines())
+        else:
+            with open('default_weights.txt','r') as default_weights:
+                weights = convert_numbers(default_weights.readlines())
     
     result = average_of_squares(numbers, weights)
     
