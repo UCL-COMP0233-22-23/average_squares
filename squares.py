@@ -64,5 +64,24 @@ def process():
         result = average_of_squares(convert_numbers(arguments.numbers_strings))
     print(result)
 
+def process_file():
+    parser = ArgumentParser(description="Computation of weighted average of squares.")
+
+    parser.add_argument('numbers_file')
+    parser.add_argument('--weight_file', '-w')
+
+    arguments = parser.parse_args()
+
+    with open(arguments.numbers_file, 'r') as f:
+        numbers = f.readline()
+
+    if arguments.weight_file:
+        with open(arguments.weight_file, 'r') as f:
+            weights = f.readline()
+        result = average_of_squares(convert_numbers(numbers), convert_numbers(weights))
+    else:
+        result = average_of_squares(convert_numbers(numbers))
+
+    print(result)
 if __name__ == "__main__":
-    process()
+    process_file()
