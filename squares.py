@@ -54,12 +54,19 @@ def convert_numbers(list_of_strings):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Generate correct averaged sums.")
-    parser.add_argument('--numbers_strings','--ns',default=[],nargs='*')
-    parser.add_argument('--weights_strings','--ws' ,default=["1","1","1"],nargs='*')    
+    parser.add_argument('--file_numbers')
+    parser.add_argument('--file_weights',default = 'default_weights.txt')    
     arguments= parser.parse_args()    
     
-    numbers = convert_numbers(arguments.numbers_strings)
-    weights = convert_numbers(arguments.weights_strings)
+    with open(arguments.file_numbers,'r') as input_numbers:
+        numbers = convert_numbers(input_numbers.readlines())
+
+    with open(arguments.file_weights,'r') as input_weights:
+        if input_weights!=None:
+            weights = convert_numbers(input_weights.readlines())
+        else:
+            with open('default_weights.txt','r') as default_weights:
+                weights = convert_numbers(default_weights.readlines())
     
     result = average_of_squares(numbers, weights)
     
