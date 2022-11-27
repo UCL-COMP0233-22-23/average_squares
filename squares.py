@@ -1,5 +1,5 @@
 """Computation of weighted average of squares."""
-
+from argparse import ArgumentParser
 
 def average_of_squares(list_of_numbers, list_of_weights=None):
     """ Return the weighted average of a list of values.
@@ -29,7 +29,7 @@ def average_of_squares(list_of_numbers, list_of_weights=None):
         for number, weight
         in zip(list_of_numbers, effective_weights)
     ]
-    return sum(squares)
+    return sum(squares)/ len(squares)
 
 
 def convert_numbers(list_of_strings):
@@ -38,7 +38,7 @@ def convert_numbers(list_of_strings):
     Example:
     --------
     >>> convert_numbers(["4", " 8 ", "15 16", " 23    42 "])
-    [4, 8, 15, 16]
+    [4.0, 8.0, 15.0, 16.0, 23.0, 42.0]
 
     """
     all_numbers = []
@@ -50,13 +50,38 @@ def convert_numbers(list_of_strings):
     return [float(number_string) for number_string in all_numbers]
 
 
-if __name__ == "__main__":
-    numbers_strings = ["1","2","4"]
-    weight_strings = ["1","1","1"]        
-    
-    numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weight_strings)
-    
-    result = average_of_squares(numbers, weights)
-    
+def process():
+    parser = ArgumentParser(description="Computation of weighted average of squares.")
+
+    parser.add_argument('numbers_strings')
+    parser.add_argument('--weight_strings', '-w')
+
+    arguments = parser.parse_args()
+
+    if arguments.weight_strings:
+        result = average_of_squares(convert_numbers(arguments.numbers_strings), convert_numbers(arguments.weight_strings))
+    else:
+        result = average_of_squares(convert_numbers(arguments.numbers_strings))
     print(result)
+
+def process_file():
+    parser = ArgumentParser(description="Computation of weighted average of squares.")
+
+    parser.add_argument('numbers_file')
+    parser.add_argument('--weight_file', '-w')
+
+    arguments = parser.parse_args()
+
+    with open(arguments.numbers_file, 'r') as f:
+        numbers = f.readline()
+
+    if arguments.weight_file:
+        with open(arguments.weight_file, 'r') as f:
+            weights = f.readline()
+        result = average_of_squares(convert_numbers(numbers), convert_numbers(weights))
+    else:
+        result = average_of_squares(convert_numbers(numbers))
+
+    print(result)
+if __name__ == "__main__":
+    process_file()
