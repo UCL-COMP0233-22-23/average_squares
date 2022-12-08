@@ -50,13 +50,25 @@ def convert_numbers(list_of_strings):
     return [int(number_string) for number_string in all_numbers]
 
 
+
+from argparse import ArgumentParser
+
 if __name__ == "__main__":
-    numbers_strings = ["1","2","4"]
+    #numbers_strings = ["1","2","4"]
     weight_strings = ["1","1","1"]        
+
+    #numbers = convert_numbers(numbers_strings)
+
+
+    parser = ArgumentParser()
+    parser.add_argument('numbers_strings')
+    arguments = parser.parse_args()    
     
-    numbers = convert_numbers(numbers_strings)
+    numbers = convert_numbers(arguments.numbers_strings)
+
+
     weights = convert_numbers(weight_strings)
-    
+
     result = average_of_squares(numbers, weights)
-    
+
     print(result)
