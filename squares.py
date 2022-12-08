@@ -55,19 +55,19 @@ from argparse import ArgumentParser
 
 if __name__ == "__main__":
     #numbers_strings = ["1","2","4"]
-    weight_strings = ["1","1","1"]        
+    #weight_strings = ["1","1","1"]        
 
     #numbers = convert_numbers(numbers_strings)
 
 
     parser = ArgumentParser()
     parser.add_argument('numbers_strings')
+    parser.add_argument('--weights', '-w')
     arguments = parser.parse_args()    
     
     numbers = convert_numbers(arguments.numbers_strings)
+    weights = convert_numbers(arguments.weights)
 
-
-    weights = convert_numbers(weight_strings)
 
     result = average_of_squares(numbers, weights)
 
