@@ -52,6 +52,8 @@ def convert_numbers(list_of_strings):
 
 
 from argparse import ArgumentParser
+import os.path
+from os import path
 
 if __name__ == "__main__":
     #numbers_strings = ["1","2","4"]
@@ -65,8 +67,30 @@ if __name__ == "__main__":
     parser.add_argument('--weights', '-w')
     arguments = parser.parse_args()    
     
-    numbers = convert_numbers(arguments.numbers_strings)
-    weights = convert_numbers(arguments.weights)
+
+
+
+    if  path.exists(arguments.numbers_strings) == True:
+
+        with open(arguments.numbers_strings, 'r') as f: #open file
+            numbers_strings = str( f.readline() ) #read and get numbers as strings from file
+            numbers = convert_numbers(numbers_strings)
+
+    else:        
+        numbers = convert_numbers(arguments.numbers_strings)
+
+
+
+
+    if  path.exists(arguments.weights) == True:
+        with open(arguments.weights, 'r') as f: #open file
+            weights_strings = str( f.readline() ) #read and get numbers as strings from file
+            weights_strings = convert_numbers(weights_strings)
+
+    else:
+        weights = convert_numbers(arguments.weights)
+        
+
 
 
     result = average_of_squares(numbers, weights)
